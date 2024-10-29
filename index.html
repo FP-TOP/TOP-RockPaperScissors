@@ -1,12 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="myscripts.js"></script>
+    <title>Rock Paper Scissors</title>
 </head>
-<body>
 
+<body>
+    <button type="button" id="rock">Rock</button>
+    <button type="button" id="paper">Paper</button>
+    <button type="button" id="scissors">Scissors</button>
+
+    <div class="resultsDiv"></div>
+
+    <script>
+        const resultsDiv = document.querySelector(".resultsDiv")
+
+        let computerScore = 0;
+        let humanScore = 0;
+
+        function getComputerChoice() {
+            const randomNumber = Math.random();
+            if (randomNumber < 0.33) return "Rock";
+            else if (randomNumber < 0.66) return "Paper";
+            else return "Scissors";
+        }
+
+        function playRound(humanChoice, computerChoice) {
+            let result;
+            const draw = document.createElement("div")
+            draw.classList.add("draw")
+
+
+            if (humanChoice === computerChoice) {
+                draw.textContent = `It's a draw, you both played ${humanChoice.toLowerCase()}.`;
+                resultsDiv.appendChild(draw)
+                result = 2; // draw
+            } else if (
+                (humanChoice === "Rock" && computerChoice === "Scissors") ||
+                (humanChoice === "Paper" && computerChoice === "Rock") ||
+                (humanChoice === "Scissors" && computerChoice === "Paper")
+            ) {
+                draw.textContent = `Well done! You picked ${humanChoice.toLowerCase()} while the computer picked ${computerChoice.toLowerCase()}.`;
+                resultsDiv.appendChild(draw)
+                result = 1; // win
+            } else {
+                draw.textContent = `You lost! You picked ${humanChoice.toLowerCase()} while the computer picked ${computerChoice.toLowerCase()}.`;
+                resultsDiv.appendChild(draw)
+                result = 3; // lose
+            }
+
+            return result;
+        }
+
+        function handleClick(playerChoice) {
+            resultsDiv.innerHTML = '';
+            const computerChoice = getComputerChoice();
+            const roundResult = playRound(playerChoice, computerChoice);
+
+            if (roundResult === 1) {
+                humanScore += 1;
+            } else if (roundResult === 3) {
+                computerScore += 1;
+            }
+
+
+            const score = document.createElement("div")
+            score.classList.add("score")
+            score.textContent = "Your score is " + humanScore + ". The computer score is " + computerScore + ".";
+            resultsDiv.appendChild(score)
+
+        }
+
+        // Add event listeners to buttons
+        document.getElementById('rock').addEventListener('click', () => handleClick("Rock"));
+        document.getElementById('paper').addEventListener('click', () => handleClick("Paper"));
+        document.getElementById('scissors').addEventListener('click', () => handleClick("Scissors"));
+    </script>
 </body>
-</html> 
+
+</html>
